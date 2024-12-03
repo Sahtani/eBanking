@@ -47,7 +47,7 @@ public class UserService {
     public UserDTO registerNewUser(UserRegistrationDTO registrationDTO) {
 
         if (userRepository.existsEbUserByEmail(registrationDTO.email())) {
-            throw new UserAlreadyExistsByEmailException("Username already exists: " + registrationDTO.email());
+            throw new UsernameAlreadyExistsException("Username already exists: " + registrationDTO.email());
         }
 
         Role userRole = roleRepository.findByName("ROLE_USER")

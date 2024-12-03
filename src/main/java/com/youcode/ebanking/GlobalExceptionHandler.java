@@ -1,7 +1,7 @@
 package com.youcode.ebanking;
 
 import com.youcode.ebanking.dto.ErrorResponseDTO;
-import com.youcode.ebanking.exception.UserAlreadyExistsByEmailException;
+import com.youcode.ebanking.exception.UsernameAlreadyExistsException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.MethodArgumentNotValidException;
@@ -14,9 +14,9 @@ import java.util.stream.Collectors;
 
 @RestControllerAdvice
 public class GlobalExceptionHandler {
-    @ExceptionHandler(UserAlreadyExistsByEmailException.class)
+    @ExceptionHandler(UsernameAlreadyExistsException.class)
     @ResponseStatus(HttpStatus.CONFLICT)
-    public ErrorResponseDTO handleUserAlreadyExists(UserAlreadyExistsByEmailException ex) {
+    public ErrorResponseDTO handleUserAlreadyExists(UsernameAlreadyExistsException ex) {
         return new ErrorResponseDTO(
                 ex.getMessage(),
                 HttpStatus.CONFLICT.value()

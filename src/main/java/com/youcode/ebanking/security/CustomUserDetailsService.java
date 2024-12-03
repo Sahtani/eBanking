@@ -1,9 +1,8 @@
-package com.youcode.ebanking.service;
+package com.youcode.ebanking.security;
 
 import com.youcode.ebanking.model.EbUser;
 import com.youcode.ebanking.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
