@@ -3,7 +3,7 @@ package com.youcode.ebanking.service;
 import com.youcode.ebanking.dto.PasswordChangeDTO;
 import com.youcode.ebanking.dto.UserDTO;
 import com.youcode.ebanking.dto.UserRegistrationDTO;
-import com.youcode.ebanking.exception.UserAlreadyExistsByEmailException;
+import com.youcode.ebanking.exception.UsernameAlreadyExistsException;
 import com.youcode.ebanking.mapper.UserMapper;
 import com.youcode.ebanking.model.EbUser;
 import com.youcode.ebanking.model.Role;
@@ -41,7 +41,7 @@ public class UserService {
      *
      * @param registrationDTO Données d'inscription
      * @return Utilisateur enregistré
-     * @throws UserAlreadyExistsByEmailException si email d'utilisateur existe déjà
+     * @throws UsernameAlreadyExistsException si email d'utilisateur existe déjà
      */
 
     public UserDTO registerNewUser(UserRegistrationDTO registrationDTO) {
