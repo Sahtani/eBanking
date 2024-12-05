@@ -13,4 +13,10 @@ spring:
     name: eBanking
 
 server:
-  port: 8082
+  port: 8081
+  logging:
+    level:
+      org:
+        springframework:
+          security: DEBUG
+

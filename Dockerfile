@@ -1,5 +1,21 @@
+
+
 FROM openjdk:21-jdk-slim
+
+
 WORKDIR /app
-COPY target/eBanking-0.0.1-SNAPSHOT.jar app.jar
+
+
+COPY . /app
+
+
+RUN apt-get update && apt-get install -y maven
+
+
+RUN mvn clean package -DskipTests
+
+
 EXPOSE 8081
-ENTRYPOINT ["java", "-jar", "app.jar"]
+
+
+CMD ["mvn", "spring-boot:run"]

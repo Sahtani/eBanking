@@ -2,6 +2,10 @@ package com.youcode.ebanking;
 
 import com.youcode.ebanking.dto.ErrorResponseDTO;
 import com.youcode.ebanking.exception.UsernameAlreadyExistsException;
+import com.youcode.ebanking.security.CustomAccessDeniedHandler;
+import jakarta.persistence.EntityNotFoundException;
+import jakarta.servlet.http.HttpServletRequest;
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.MethodArgumentNotValidException;
@@ -13,7 +17,10 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @RestControllerAdvice
+@RequiredArgsConstructor
 public class GlobalExceptionHandler {
+
+    private final CustomAccessDeniedHandler accessDeniedHandler;
     @ExceptionHandler(UsernameAlreadyExistsException.class)
     @ResponseStatus(HttpStatus.CONFLICT)
     public ErrorResponseDTO handleUserAlreadyExists(UsernameAlreadyExistsException ex) {
@@ -41,12 +48,23 @@ public class GlobalExceptionHandler {
 
         return new ResponseEntity<>(errors, HttpStatus.BAD_REQUEST);
     }
-    @ExceptionHandler(Exception.class)
-    public ResponseEntity<Object> handleGenericException(Exception ex) {
-        return new ResponseEntity<>(new ErrorResponseDTO(
+
+
+    @ExceptionHandler(EntityNotFoundException.class)
+    public ResponseEntity<ErrorResponseDTO> handleEntityNotFound(EntityNotFoundException ex) {
+        ErrorResponseDTO errorResponse = new ErrorResponseDTO(
                 ex.getMessage(),
-                HttpStatus.INTERNAL_SERVER_ERROR.value()
-        ), HttpStatus.INTERNAL_SERVER_ERROR);
+                HttpStatus.NOT_FOUND.value()
+        );
+        return new ResponseEntity<>(errorResponse, HttpStatus.NOT_FOUND);
     }
+    @ExceptionHandler(Exception.class)
+    public ResponseEntity<ErrorResponseDTO> handleGenericException(Exception ex, HttpServletRequest request) {
+        ErrorResponseDTO errorResponse = new ErrorResponseDTO("Internal Server Error",
+                HttpStatus.INTERNAL_SERVER_ERROR.value()
+                );
+        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(errorResponse);
+    }
+
 
 }
