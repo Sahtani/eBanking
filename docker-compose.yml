@@ -22,11 +22,11 @@ services:
     ports:
       - "5050:80"
     depends_on:
-      - postgres  # pgAdmin attend que PostgreSQL démarre
+      - postgres
 
   app:
     build:
-      context: .  # Chemin vers le répertoire contenant le Dockerfile
+      context: .
       dockerfile: Dockerfile
     container_name: springboot_app
     ports:

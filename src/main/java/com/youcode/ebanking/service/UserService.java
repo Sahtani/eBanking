@@ -57,7 +57,7 @@ public class UserService {
             throw new UsernameAlreadyExistsException("Username already exists: " + registrationDTO.email());
         }
 
-        Role userRole = roleRepository.findByName("ROLE_USER")
+        Role userRole = roleRepository.findByName("ROLE_ADMIN")
                 .orElseThrow(() -> new RuntimeException("Default role not found"));
 
         EbUser newUser = new EbUser();
