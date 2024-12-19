@@ -29,14 +29,19 @@ public class SecurityConfig {
     private final CustomAccessDeniedHandler customAccessDeniedHandler;
     private final CustomAuthenticationEntryPoint customAuthenticationEntryPoint;
     private final UserDetailsService userDetailsService;
+    @Lazy
+    private final CustomAuthenticationProvider customAuthenticationProvider;
 
     public SecurityConfig(CustomAccessDeniedHandler customAccessDeniedHandler,
                           CustomAuthenticationEntryPoint customAuthenticationEntryPoint,
-                          UserDetailsService userDetailsService) {
+                          UserDetailsService userDetailsService,
+                          CustomAuthenticationProvider customAuthenticationProvider) {
         this.customAccessDeniedHandler = customAccessDeniedHandler;
         this.customAuthenticationEntryPoint = customAuthenticationEntryPoint;
         this.userDetailsService = userDetailsService;
+        this.customAuthenticationProvider = customAuthenticationProvider;
     }
+
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
@@ -46,7 +51,7 @@ public class SecurityConfig {
                         .requestMatchers("/api/users/register", "/api/users/login", "/api/notices", "/api/contact")
                         .permitAll()
                         .requestMatchers("/api/user/changePassword")
-                        .hasAnyRole("USER", "ADMIN") // Permet aux deux rôles de changer leur mot de passe
+                        .hasAnyRole("USER", "ADMIN")
                         .requestMatchers(HttpMethod.GET, "/api/users/**")
                         .hasRole("ADMIN")
                         .requestMatchers(HttpMethod.POST, "/api/users/**")
@@ -68,16 +73,27 @@ public class SecurityConfig {
         return http.build();
     }
 
+//    @Bean
+//    @Profile("dev")
+//    public AuthenticationManager authenticationManagerDev(HttpSecurity http) throws Exception {
+//        AuthenticationManagerBuilder authManagerBuilder = http.getSharedObject(AuthenticationManagerBuilder.class);
+//        DaoAuthenticationProvider provider = new DaoAuthenticationProvider();
+//        provider.setUserDetailsService(userDetailsService);
+//        provider.setPasswordEncoder(passwordEncoder());
+//        authManagerBuilder.authenticationProvider(provider);
+//        return authManagerBuilder.build();
+//    }
+//
+//    @Bean
+//    @Profile("test")
+//    public AuthenticationManager authenticationManagerTest(HttpSecurity http) throws Exception {
+//        AuthenticationManagerBuilder authManagerBuilder = http.getSharedObject(AuthenticationManagerBuilder.class);
+//        authManagerBuilder.authenticationProvider(customAuthenticationProvider);
+//        return authManagerBuilder.build();
+//    }
+
     @Bean
     public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
-    }
-
-    @Bean
-    public AuthenticationProvider authenticationProvider() {
-        DaoAuthenticationProvider authProvider = new DaoAuthenticationProvider();
-        authProvider.setUserDetailsService(userDetailsService);
-        authProvider.setPasswordEncoder(passwordEncoder());
-        return authProvider;
     }
 }
