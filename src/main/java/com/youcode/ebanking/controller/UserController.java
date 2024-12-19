@@ -58,10 +58,9 @@ public class UserController {
         return ResponseEntity.noContent().build();
     }
 
-    @PutMapping("/{username}")
-    @PreAuthorize("hasRole('USER')")
-    public ResponseEntity<Void> changePassword(@PathVariable String username, PasswordChangeDTO passwordChangeDTO) {
-        userService.changePassword(username, passwordChangeDTO);
-        return ResponseEntity.noContent().build();
+    @PostMapping("/changePassword")
+    public ResponseEntity<String> changePassword(@RequestBody @Valid PasswordChangeDTO passwordChangeDTO) {
+        userService.changePassword(passwordChangeDTO);
+        return ResponseEntity.ok("Mot de passe modifié avec succès");
     }
 }
